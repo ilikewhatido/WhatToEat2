@@ -21,6 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.song.whattoeat2.fragment.BaseFragment;
+import com.example.song.whattoeat2.fragment.Groups;
+import com.example.song.whattoeat2.fragment.Home;
+import com.example.song.whattoeat2.fragment.Restaurants;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -85,51 +90,15 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_main_action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+    public enum Section {
+        HOME, GROUPS, RESTAURANTS;
     }
 
     /**
@@ -144,28 +113,37 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            Fragment fragment = null;
+            switch(Section.values()[position]) {
+                case HOME:
+                    return Home.newInstance(position);
+                case GROUPS:
+                    return Groups.newInstance(position);
+                case RESTAURANTS:
+                    return Restaurants.newInstance(position);
+                default:
+                    return null;
+            }
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return Section.values().length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+            switch (Section.values()[position]) {
+                case HOME:
+                    return getString(R.string.tab_title_home);
+                case GROUPS:
+                    return getString(R.string.tab_title_groups);
+                case RESTAURANTS:
+                    return getString(R.string.tab_title_restaurants);
+                default:
+                    return null;
             }
-            return null;
         }
     }
 }
