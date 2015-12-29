@@ -20,14 +20,14 @@ public class DBAdapter {
 
     // TABLE: CIRCLE
     public static final String TABLE_CIRCLE = "circle";
-    public static final String CIRCLE_ID = "_id";
-    public static final String CIRCLE_NAME = "name";
-    public static final String CREATE_TABLE_CIRCLE = "CREATE TABLE " + TABLE_CIRCLE + " (" +
-            CIRCLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            CIRCLE_NAME + " VARCHAR(255) NOT NULL " +
+    public static final String GROUP_ID = "_id";
+    public static final String GROUP_NAME = "name";
+    public static final String CREATE_TABLE_GROUP = "CREATE TABLE " + TABLE_CIRCLE + " (" +
+            GROUP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            GROUP_NAME + " VARCHAR(255) NOT NULL " +
             ");";
-    public static final String DEFAULT_CIRCLE = "\"ALL\"";
-    public static final String CREATE_DEFAULT_CIRCLE = "INSERT INTO " + TABLE_CIRCLE + " (" + CIRCLE_NAME + ")" + " VALUES (" + DEFAULT_CIRCLE + ");";
+    //public static final String DEFAULT_GROUP = "\"ALL\"";
+    //public static final String CREATE_DEFAULT_GROUP = "INSERT INTO " + TABLE_CIRCLE + " (" + GROUP_NAME + ")" + " VALUES (" + DEFAULT_GROUP + ");";
 
     // TABLE: RESTAURANT
     public static final String TABLE_RESTAURANT = "restaurant";
@@ -42,15 +42,15 @@ public class DBAdapter {
     public static final String DROP_TABLE_RESTAURANT = "DROP TABLE " + TABLE_RESTAURANT + " IF EXISTS;";
 
     // TABLE RESTAURANT_CIRCLE
-    public static final String TABLE_RESTAURANT_CIRCLE = "restaurant_circle";
-    public static final String RESTAURANT_CIRCLE_RESTAURANT_ID = "restaurant_id";
-    public static final String RESTAURANT_CIRCLE_CIRCLE_ID = "circle_id";
-    public static final String CREATE_TABLE_TABLE_RESTAURANT_CIRCLE = "CREATE TABLE " + TABLE_RESTAURANT_CIRCLE + " (" +
-            RESTAURANT_CIRCLE_RESTAURANT_ID  + " INTEGER, " +
-            RESTAURANT_CIRCLE_CIRCLE_ID + " INTEGER, " +
-            "PRIMARY KEY (" + RESTAURANT_CIRCLE_RESTAURANT_ID + ", " + RESTAURANT_CIRCLE_CIRCLE_ID + "), " +
-            "FOREIGN KEY (" + RESTAURANT_CIRCLE_RESTAURANT_ID + ") REFERENCES " + TABLE_RESTAURANT + " ("+ RESTAURANT_ID + ") ON DELETE CASCADE, " +
-            "FOREIGN KEY (" + RESTAURANT_CIRCLE_CIRCLE_ID + ") REFERENCES " + TABLE_CIRCLE + " ("+ CIRCLE_ID + ") ON DELETE CASCADE" +
+    public static final String TABLE_RESTAURANT_GROUP = "restaurant_circle";
+    public static final String RESTAURANT_GROUP_RESTAURANT_ID = "restaurant_id";
+    public static final String RESTAURANT_GROUP_GROUP_ID = "circle_id";
+    public static final String CREATE_TABLE_RESTAURANT_GROUP = "CREATE TABLE " + TABLE_RESTAURANT_GROUP + " (" +
+            RESTAURANT_GROUP_RESTAURANT_ID + " INTEGER, " +
+            RESTAURANT_GROUP_GROUP_ID + " INTEGER, " +
+            "PRIMARY KEY (" + RESTAURANT_GROUP_RESTAURANT_ID + ", " + RESTAURANT_GROUP_GROUP_ID + "), " +
+            "FOREIGN KEY (" + RESTAURANT_GROUP_RESTAURANT_ID + ") REFERENCES " + TABLE_RESTAURANT + " ("+ RESTAURANT_ID + ") ON DELETE CASCADE, " +
+            "FOREIGN KEY (" + RESTAURANT_GROUP_GROUP_ID + ") REFERENCES " + TABLE_CIRCLE + " ("+ GROUP_ID + ") ON DELETE CASCADE" +
             ");";
 
     public DBAdapter(Context context) {
@@ -69,31 +69,31 @@ public class DBAdapter {
         String[] idsToDelete = new String[ids.length];
         for(int i = 0; i < ids.length; i++)
             idsToDelete[i] = String.valueOf(ids[i]);
-        String whereClause = CIRCLE_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
+        String whereClause = GROUP_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
         Log.d(getClass().getName(), "deleteRestaurantByGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_CIRCLE, whereClause, null);
     }
 
     public long addRestaurantToGroup(long restaurantId, long circleId) {
         ContentValues cv = new ContentValues();
-        cv.put(RESTAURANT_CIRCLE_RESTAURANT_ID, restaurantId);
-        cv.put(RESTAURANT_CIRCLE_CIRCLE_ID, circleId);
-        return mSQLiteDatabase.insert(TABLE_RESTAURANT_CIRCLE, null, cv);
+        cv.put(RESTAURANT_GROUP_RESTAURANT_ID, restaurantId);
+        cv.put(RESTAURANT_GROUP_GROUP_ID, circleId);
+        return mSQLiteDatabase.insert(TABLE_RESTAURANT_GROUP, null, cv);
     }
 
     public void removeRestaurantFromGroup(long[] restaurantIds, long circleId) {
         String[] idsToDelete = new String[restaurantIds.length];
         for(int i = 0; i < restaurantIds.length; i++)
             idsToDelete[i] = String.valueOf(restaurantIds[i]);
-        String whereClause = RESTAURANT_CIRCLE_CIRCLE_ID + " = " + circleId + " AND " + RESTAURANT_CIRCLE_RESTAURANT_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
+        String whereClause = RESTAURANT_GROUP_GROUP_ID + " = " + circleId + " AND " + RESTAURANT_GROUP_RESTAURANT_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
         Log.d(getClass().getName(), "unlinkRestaurantFromGroup" + " WHERE " + whereClause);
-        mSQLiteDatabase.delete(TABLE_RESTAURANT_CIRCLE, whereClause, null);
+        mSQLiteDatabase.delete(TABLE_RESTAURANT_GROUP, whereClause, null);
     }
 
     public long addGroup(String name) {
         Log.d(getClass().getName(), "Adding circle(" + name + ")");
         ContentValues cv = new ContentValues();
-        cv.put(CIRCLE_NAME, name);
+        cv.put(GROUP_NAME, name);
         return mSQLiteDatabase.insert(TABLE_CIRCLE, null, cv);
     }
 
@@ -116,8 +116,8 @@ public class DBAdapter {
         String sql = "SELECT * FROM " + TABLE_RESTAURANT +
                 " WHERE " + RESTAURANT_ID +
                 " IN" +
-                " ( SELECT " + RESTAURANT_CIRCLE_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_CIRCLE +
-                " WHERE " + RESTAURANT_CIRCLE_CIRCLE_ID + " = " + id + ");";
+                " ( SELECT " + RESTAURANT_GROUP_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_GROUP +
+                " WHERE " + RESTAURANT_GROUP_GROUP_ID + " = " + id + ");";
         return mSQLiteDatabase.rawQuery(sql, null);
     }
 
@@ -125,14 +125,14 @@ public class DBAdapter {
         String sql = "SELECT * FROM " + TABLE_RESTAURANT +
                 " WHERE " + RESTAURANT_ID +
                 " NOT IN" +
-                " ( SELECT " + RESTAURANT_CIRCLE_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_CIRCLE +
-                " WHERE " + RESTAURANT_CIRCLE_CIRCLE_ID + " = " + id + ");";
+                " ( SELECT " + RESTAURANT_GROUP_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_GROUP +
+                " WHERE " + RESTAURANT_GROUP_GROUP_ID + " = " + id + ");";
         return mSQLiteDatabase.rawQuery(sql, null);
     }
 
     public Cursor getGroups() {
         Log.d(getClass().getName(), "executing getCircles...");
-        String[] columns = {CIRCLE_ID, CIRCLE_NAME};
+        String[] columns = {GROUP_ID, GROUP_NAME};
         return mSQLiteDatabase.query(TABLE_CIRCLE, columns, null, null, null, null, null);
     }
 
@@ -152,10 +152,10 @@ public class DBAdapter {
         public void onCreate(SQLiteDatabase db) {
             try {
                 Log.e(getClass().getName(), "Creating database...");
-                db.execSQL(CREATE_TABLE_CIRCLE);
-                db.execSQL(CREATE_DEFAULT_CIRCLE);
+                db.execSQL(CREATE_TABLE_GROUP);
+                //db.execSQL(CREATE_DEFAULT_GROUP);
                 db.execSQL(CREATE_TABLE_RESTAURANT);
-                db.execSQL(CREATE_TABLE_TABLE_RESTAURANT_CIRCLE);
+                db.execSQL(CREATE_TABLE_RESTAURANT_GROUP);
             } catch (SQLException e) {
                 Log.e(getClass().getName(), e.getMessage());
             }

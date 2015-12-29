@@ -9,8 +9,11 @@
     <string name="tab_title_restaurants">Restaurants</string>
     <string name="tab_title_groups">Groups</string>
 
-    <string name="dialog_add_restaurant_name">Name</string>
-    <string name="dialog_add_restaurant_number">Number</string>
+    <string name="dialog_add_restaurant_name">Restaurant Name</string>
+    <string name="dialog_add_restaurant_number">Restaurant Number</string>
+
+    <string name="dialog_add_group_name">Group Name</string>
+    <string name="dialog_add_group_number">Group Number</string>
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>

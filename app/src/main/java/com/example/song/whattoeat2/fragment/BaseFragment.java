@@ -17,6 +17,7 @@ import com.example.song.whattoeat2.database.DBAdapter;
 public class BaseFragment extends Fragment {
 
     public static final String ARG_SECTION_NUMBER = "section_number";
+
     protected DBAdapter mDBAdapter;
 
     @Override
@@ -25,7 +26,6 @@ public class BaseFragment extends Fragment {
         mDBAdapter = new DBAdapter(getActivity());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add, menu);
