@@ -1,6 +1,8 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +22,18 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
     private ClickListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+
         public TextView name;
         public TextView number;
+        //public View selectedOverlay;
+
         private ClickListener listener;
 
         public ViewHolder(View itemView, ClickListener listener) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.row_restaurant_name);
             number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
+            //selectedOverlay = itemView.findViewById(R.id.row_restaurant_selected_overlay);
             this.listener = listener;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -80,6 +86,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
 
     public interface ClickListener {
         void onItemClicked(int position);
+
         boolean onItemLongClicked(int position);
     }
 }

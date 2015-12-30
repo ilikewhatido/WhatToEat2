@@ -73,15 +73,19 @@ public class RestaurantFragment extends BaseFragment implements RestaurantAdapte
             // Not in action mode... do the normal thing
         } else {
             toggleSelection(position);
+
+            StringBuilder builder = new StringBuilder();
+            for(int i : mRestaurantAdapter.getSelectedItems()) {
+                builder.append(i).append(", ");
+            }
+            Log.d("wawawa", builder.toString());
+
         }
     }
 
     @Override
     public boolean onItemLongClicked(int position) {
-
-        Log.d("wawawa","onItemLongClicked");
         if (mActionMode == null) {
-            Log.d("wawawa","null");
             mActionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(mActionModeCallback);
         }
         toggleSelection(position);
@@ -120,7 +124,6 @@ public class RestaurantFragment extends BaseFragment implements RestaurantAdapte
                     mRestaurantAdapter.getSelectedItems();
                     mode.finish();
                     return true;
-
                 default:
                     return false;
             }
@@ -128,7 +131,6 @@ public class RestaurantFragment extends BaseFragment implements RestaurantAdapte
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Log.d("wawawa", "onDestroyActionMode");
             mRestaurantAdapter.clearSelection();
             mActionMode = null;
         }
