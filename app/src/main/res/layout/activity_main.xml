@@ -15,25 +15,27 @@
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+        <!--  app:layout_scrollFlags="scroll|enterAlways" -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            style="@style/AppTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMaxWidth="0dp" />
+            app:tabGravity="fill" />
+        app:tabMode="fixed" />
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- Scrolling problem http://stackoverflow.com/questions/33863306/last-item-on-listview-is-cut-off -->
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"

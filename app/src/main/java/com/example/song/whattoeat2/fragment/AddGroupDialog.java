@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.database.Group;
 
 public class AddGroupDialog extends DialogFragment implements View.OnClickListener {
 
@@ -34,7 +35,8 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         int id = v.getId();
         if(id == R.id.dialog_add_group_ok) {
             Groups fragment = ((Groups) getTargetFragment());
-            fragment.addGroup(mName.getText().toString());
+            Group group = new Group(mName.getText().toString());
+            fragment.addGroup(group);
             fragment.updateUI();
             dismiss();
         } else if (id == R.id.dialog_add_group_cancel) {

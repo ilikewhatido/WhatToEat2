@@ -4,9 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_groups_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

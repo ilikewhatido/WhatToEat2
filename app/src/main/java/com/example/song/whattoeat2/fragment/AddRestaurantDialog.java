@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.database.Restaurant;
 
 public class AddRestaurantDialog extends DialogFragment implements View.OnClickListener {
 
@@ -34,7 +35,8 @@ public class AddRestaurantDialog extends DialogFragment implements View.OnClickL
         int id = v.getId();
         if(id == R.id.dialog_add_restaurant_ok) {
             Restaurants fragment = ((Restaurants) getTargetFragment());
-            fragment.addRestaurant(mName.getText().toString(), mNumber.getText().toString());
+            Restaurant restaurant = new Restaurant(mName.getText().toString(), mNumber.getText().toString());
+            fragment.addRestaurant(restaurant);
             fragment.updateUI();
             dismiss();
         } else if (id == R.id.dialog_add_restaurant_cancel) {

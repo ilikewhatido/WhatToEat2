@@ -2,18 +2,21 @@ package com.example.song.whattoeat2.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.song.whattoeat2.R;
-import com.example.song.whattoeat2.database.DBAdapter;
+import com.example.song.whattoeat2.database.Restaurant;
 
 public class Restaurants extends BaseFragment {
 
-    private ListView mRestaurantsListView;
+    private RecyclerView mRestaurantsRecyclerView;
+    private RestaurantAdapter mRestaurantAdapter;
 
     public static Restaurants newInstance(int sectionNumber) {
         Restaurants fragment = new Restaurants();
@@ -30,16 +33,14 @@ public class Restaurants extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mRestaurantsListView = (ListView) getActivity().findViewById(R.id.fragment_restaurants_list);
-        mRestaurantsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.row_restaurant,
-                mDBAdapter.getRestaurants(),
-                new String[] { DBAdapter.RESTAURANT_NAME, DBAdapter.RESTAURANT_NUMBER },
-                new int[] { R.id.row_restaurant_name, R.id.row_restaurant_number }
-        );
-        mRestaurantsListView.setAdapter(adapter);
+        mRestaurantsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_restaurants_list);
+
+        // TODO
+        // https://www.bignerdranch.com/blog/recyclerview-part-2-choice-modes/
+        mRestaurantAdapter = new RestaurantAdapter(mDBAdapter.getRestaurants());
+        mRestaurantsRecyclerView.setAdapter(mRestaurantAdapter);
+        mRestaurantsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRestaurantsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,12 +54,10 @@ public class Restaurants extends BaseFragment {
                 return true;
         }
     }
-    public long addRestaurant(String name, String number) {
-        return mDBAdapter.addRestaurant(name, number);
+    public long addRestaurant(Restaurant restaurant) {
+        return mDBAdapter.addRestaurant(restaurant);
     }
     public void updateUI() {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) mRestaurantsListView.getAdapter();
-        adapter.changeCursor(mDBAdapter.getRestaurants());
-        adapter.notifyDataSetChanged();
+        mRestaurantAdapter.update(mDBAdapter.getRestaurants());
     }
 }

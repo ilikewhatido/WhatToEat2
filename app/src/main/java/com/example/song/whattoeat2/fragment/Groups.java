@@ -2,6 +2,8 @@ package com.example.song.whattoeat2.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,10 +12,12 @@ import android.widget.ListView;
 
 import com.example.song.whattoeat2.R;
 import com.example.song.whattoeat2.database.DBAdapter;
+import com.example.song.whattoeat2.database.Group;
 
 public class Groups extends BaseFragment {
 
-    private ListView mGroupsListView;
+    private RecyclerView mGroupsRecyclerView;
+    private GroupAdapter mGroupAdapter;
 
     public static Groups newInstance(int sectionNumber) {
         Groups fragment = new Groups();
@@ -30,16 +34,11 @@ public class Groups extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mGroupsListView = (ListView) getActivity().findViewById(R.id.fragment_groups_list);
-        mGroupsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.row_group,
-                mDBAdapter.getGroups(),
-                new String[] { DBAdapter.GROUP_NAME},
-                new int[] { R.id.row_group_name }
-        );
-        mGroupsListView.setAdapter(adapter);
+        mGroupAdapter = new GroupAdapter(mDBAdapter.getGroups());
+        mGroupsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_groups_list);
+        mGroupsRecyclerView.setAdapter(mGroupAdapter);
+        mGroupsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mGroupsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,12 +52,10 @@ public class Groups extends BaseFragment {
                 return true;
         }
     }
-    public long addGroup(String name) {
-        return mDBAdapter.addGroup(name);
+    public long addGroup(Group group) {
+        return mDBAdapter.addGroup(group);
     }
     public void updateUI() {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) mGroupsListView.getAdapter();
-        adapter.changeCursor(mDBAdapter.getGroups());
-        adapter.notifyDataSetChanged();
+        mGroupAdapter.update(mDBAdapter.getGroups());
     }
 }

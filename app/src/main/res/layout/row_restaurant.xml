@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="6dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/row_restaurant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dp"
+        android:padding="4dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/textColorPrimary" />
 
@@ -17,7 +16,7 @@
         android:id="@+id/row_restaurant_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dp"
+        android:padding="4dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/textColorSecondary" />
 

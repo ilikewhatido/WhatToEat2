@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
-/**
- * Created by Song on 2015/12/7.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBAdapter {
 
     private static final String DB_NAME = "wte2.db";
@@ -52,20 +52,53 @@ public class DBAdapter {
             "FOREIGN KEY (" + RESTAURANT_GROUP_RESTAURANT_ID + ") REFERENCES " + TABLE_RESTAURANT + " ("+ RESTAURANT_ID + ") ON DELETE CASCADE, " +
             "FOREIGN KEY (" + RESTAURANT_GROUP_GROUP_ID + ") REFERENCES " + TABLE_CIRCLE + " ("+ GROUP_ID + ") ON DELETE CASCADE" +
             ");";
-
     public DBAdapter(Context context) {
         mSQLiteDatabase = new DbHelper(context, DB_NAME, null, DB_VERSION).getWritableDatabase();
     }
-
+    public long addRestaurant(Restaurant restaurant) {
+        ContentValues cv = new ContentValues();
+        cv.put(RESTAURANT_NAME, restaurant.getName());
+        cv.put(RESTAURANT_NUMBER, restaurant.getNumber());
+        return mSQLiteDatabase.insert(TABLE_RESTAURANT, null, cv);
+    }
     public long addRestaurant(String name, String number) {
-        Log.d(getClass().getName(), "Adding restaurant(name=" + name + ", number= " + number + ")");
         ContentValues cv = new ContentValues();
         cv.put(RESTAURANT_NAME, name);
         cv.put(RESTAURANT_NUMBER, number);
         return mSQLiteDatabase.insert(TABLE_RESTAURANT, null, cv);
     }
-
-    public void deleteGroups(long[] ids) {
+    public long addGroup(Group group) {
+        ContentValues cv = new ContentValues();
+        cv.put(GROUP_NAME, group.getName());
+        return mSQLiteDatabase.insert(TABLE_CIRCLE, null, cv);
+    }
+    public long addGroup(String name) {
+        Log.d(getClass().getName(), "Adding circle(" + name + ")");
+        ContentValues cv = new ContentValues();
+        cv.put(GROUP_NAME, name);
+        return mSQLiteDatabase.insert(TABLE_CIRCLE, null, cv);
+    }
+    public List<Restaurant> getRestaurants() {
+        List<Restaurant> list = new ArrayList();
+        String[] columns = {RESTAURANT_ID, RESTAURANT_NAME, RESTAURANT_NUMBER};
+        Cursor cursor = null;
+        try {
+            cursor = mSQLiteDatabase.query(TABLE_RESTAURANT, columns, null, null, null, null, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
+                Restaurant restaurant = new Restaurant(name, number);
+                list.add(restaurant);
+                cursor.moveToNext();
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return list;
+    }
+    public void deleteGroupsById(long[] ids) {
         String[] idsToDelete = new String[ids.length];
         for(int i = 0; i < ids.length; i++)
             idsToDelete[i] = String.valueOf(ids[i]);
@@ -73,15 +106,13 @@ public class DBAdapter {
         Log.d(getClass().getName(), "deleteRestaurantByGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_CIRCLE, whereClause, null);
     }
-
-    public long addRestaurantToGroup(long restaurantId, long circleId) {
+    public long addRestaurantToGroupById(long restaurantId, long circleId) {
         ContentValues cv = new ContentValues();
         cv.put(RESTAURANT_GROUP_RESTAURANT_ID, restaurantId);
         cv.put(RESTAURANT_GROUP_GROUP_ID, circleId);
         return mSQLiteDatabase.insert(TABLE_RESTAURANT_GROUP, null, cv);
     }
-
-    public void removeRestaurantFromGroup(long[] restaurantIds, long circleId) {
+    public void removeRestaurantFromGroupById(long[] restaurantIds, long circleId) {
         String[] idsToDelete = new String[restaurantIds.length];
         for(int i = 0; i < restaurantIds.length; i++)
             idsToDelete[i] = String.valueOf(restaurantIds[i]);
@@ -89,15 +120,7 @@ public class DBAdapter {
         Log.d(getClass().getName(), "unlinkRestaurantFromGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT_GROUP, whereClause, null);
     }
-
-    public long addGroup(String name) {
-        Log.d(getClass().getName(), "Adding circle(" + name + ")");
-        ContentValues cv = new ContentValues();
-        cv.put(GROUP_NAME, name);
-        return mSQLiteDatabase.insert(TABLE_CIRCLE, null, cv);
-    }
-
-    public void removeRestaurants(long[] ids) {
+    public void removeRestaurantsById(long[] ids) {
         String[] idsToDelete = new String[ids.length];
         for(int i = 0; i < ids.length; i++)
             idsToDelete[i] = String.valueOf(ids[i]);
@@ -105,49 +128,82 @@ public class DBAdapter {
         Log.d(getClass().getName(), "deleteRestaurants" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT, whereClause, null);
     }
-
-    public Cursor getRestaurants() {
-        Log.d(getClass().getName(), "executing getRestaurants...");
-        String[] columns = {RESTAURANT_ID, RESTAURANT_NAME, RESTAURANT_NUMBER};
-        return mSQLiteDatabase.query(TABLE_RESTAURANT, columns, null, null, null, null, null);
-    }
-
-    public Cursor getRestaurantsByGroup(long id) {
+    public List<Restaurant> getRestaurantsByGroupId(long id) {
         String sql = "SELECT * FROM " + TABLE_RESTAURANT +
                 " WHERE " + RESTAURANT_ID +
                 " IN" +
                 " ( SELECT " + RESTAURANT_GROUP_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_GROUP +
                 " WHERE " + RESTAURANT_GROUP_GROUP_ID + " = " + id + ");";
-        return mSQLiteDatabase.rawQuery(sql, null);
+        List<Restaurant> restaurants = new ArrayList();
+        Cursor cursor = null;
+        try {
+            cursor = mSQLiteDatabase.rawQuery(sql, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
+                Restaurant restaurant = new Restaurant(name, number);
+                restaurants.add(restaurant);
+                cursor.moveToNext();
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return restaurants;
     }
-
-    public Cursor getRestaurantsNotInGroup(long id) {
+    public List<Restaurant> getRestaurantsNotInGroup(long id) {
         String sql = "SELECT * FROM " + TABLE_RESTAURANT +
                 " WHERE " + RESTAURANT_ID +
                 " NOT IN" +
                 " ( SELECT " + RESTAURANT_GROUP_RESTAURANT_ID + " FROM " + TABLE_RESTAURANT_GROUP +
                 " WHERE " + RESTAURANT_GROUP_GROUP_ID + " = " + id + ");";
-        return mSQLiteDatabase.rawQuery(sql, null);
+        List<Restaurant> restaurants = new ArrayList();
+        Cursor cursor = null;
+        try {
+            cursor = mSQLiteDatabase.rawQuery(sql, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
+                Restaurant restaurant = new Restaurant(name, number);
+                restaurants.add(restaurant);
+                cursor.moveToNext();
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return restaurants;
     }
-
-    public Cursor getGroups() {
-        Log.d(getClass().getName(), "executing getCircles...");
+    public List<Group> getGroups() {
         String[] columns = {GROUP_ID, GROUP_NAME};
-        return mSQLiteDatabase.query(TABLE_CIRCLE, columns, null, null, null, null, null);
+        List<Group> groups = new ArrayList();
+        Cursor cursor = null;
+        try {
+            cursor = mSQLiteDatabase.query(TABLE_CIRCLE, columns, null, null, null, null, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(GROUP_NAME));
+                Group group = new Group(name);
+                groups.add(group);
+                cursor.moveToNext();
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return groups;
     }
-
     private class DbHelper extends SQLiteOpenHelper {
-
         public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, DB_NAME, null, DB_VERSION);
         }
-
         @Override
         public void onConfigure(SQLiteDatabase db) {
             super.onConfigure(db);
             db.setForeignKeyConstraintsEnabled(true);
         }
-
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
@@ -160,7 +216,6 @@ public class DBAdapter {
                 Log.e(getClass().getName(), e.getMessage());
             }
         }
-
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             try {
