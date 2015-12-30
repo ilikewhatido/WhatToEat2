@@ -1,6 +1,10 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,6 +76,16 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         String number = restaurants.get(position).getNumber();
         holder.name.setText(name);
         holder.number.setText(number);
+
+        // Highlight selected item
+        Context context = ((Fragment)listener).getActivity();
+        if(isSelected(position)) {
+            holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            holder.number.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        } else {
+            holder.name.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
+            holder.number.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+        }
     }
 
     @Override

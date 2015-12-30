@@ -73,13 +73,6 @@ public class RestaurantFragment extends BaseFragment implements RestaurantAdapte
             // Not in action mode... do the normal thing
         } else {
             toggleSelection(position);
-
-            StringBuilder builder = new StringBuilder();
-            for(int i : mRestaurantAdapter.getSelectedItems()) {
-                builder.append(i).append(", ");
-            }
-            Log.d("wawawa", builder.toString());
-
         }
     }
 
@@ -94,11 +87,12 @@ public class RestaurantFragment extends BaseFragment implements RestaurantAdapte
 
     private void toggleSelection(int position) {
         mRestaurantAdapter.toggleSelection(position);
+        int total = mRestaurantAdapter.getItemCount();
         int count = mRestaurantAdapter.getSelectedItemCount();
         if (count == 0) {
             mActionMode.finish();
         } else {
-            mActionMode.setTitle(String.valueOf(count));
+            mActionMode.setTitle(count + "/" + total);
             mActionMode.invalidate();
         }
     }
