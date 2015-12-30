@@ -2,7 +2,6 @@ package com.example.song.whattoeat2.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.dialog_add_group_ok) {
-            Groups fragment = ((Groups) getTargetFragment());
+            GroupFragment fragment = ((GroupFragment) getTargetFragment());
             Group group = new Group(mName.getText().toString());
             fragment.addGroup(group);
             fragment.updateUI();

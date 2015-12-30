@@ -1,17 +1,16 @@
 package com.example.song.whattoeat2.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.song.whattoeat2.R;
 
-public class Home extends BaseFragment {
+public class HomeFragment extends BaseFragment {
 
-    public static Home newInstance(int sectionNumber) {
-        Home fragment = new Home();
+    public static HomeFragment newInstance(int sectionNumber) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

@@ -34,7 +34,7 @@ public class AddRestaurantDialog extends DialogFragment implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.dialog_add_restaurant_ok) {
-            Restaurants fragment = ((Restaurants) getTargetFragment());
+            RestaurantFragment fragment = ((RestaurantFragment) getTargetFragment());
             Restaurant restaurant = new Restaurant(mName.getText().toString(), mNumber.getText().toString());
             fragment.addRestaurant(restaurant);
             fragment.updateUI();

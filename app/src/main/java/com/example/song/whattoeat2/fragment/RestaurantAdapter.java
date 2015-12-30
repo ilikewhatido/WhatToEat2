@@ -14,41 +14,72 @@ import java.util.List;
 /**
  * Created by Song on 2015/12/29.
  */
-public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewHolder> {
 
-    private List<Restaurant> mRestaurants;
+    private List<Restaurant> restaurants;
+    private ClickListener listener;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mName;
-        public TextView mNumber;
-        public ViewHolder(View v) {
-            super(v);
-            mName = (TextView) v.findViewById(R.id.row_restaurant_name);
-            mNumber = (TextView) v.findViewById(R.id.row_restaurant_number);
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        public TextView name;
+        public TextView number;
+        private ClickListener listener;
+
+        public ViewHolder(View itemView, ClickListener listener) {
+            super(itemView);
+            name = (TextView) itemView.findViewById(R.id.row_restaurant_name);
+            number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
+            this.listener = listener;
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClicked(getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (listener != null) {
+                return listener.onItemLongClicked(getAdapterPosition());
+            }
+            return false;
         }
     }
-    public RestaurantAdapter(List<Restaurant> mRestaurants) {
-        this.mRestaurants = mRestaurants;
+
+    public RestaurantAdapter(List<Restaurant> mRestaurants, ClickListener listener) {
+        this.restaurants = mRestaurants;
+        this.listener = listener;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_restaurant, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String name = mRestaurants.get(position).getName();
-        String number = mRestaurants.get(position).getNumber();
-        holder.mName.setText(name);
-        holder.mNumber.setText(number);
+        String name = restaurants.get(position).getName();
+        String number = restaurants.get(position).getNumber();
+        holder.name.setText(name);
+        holder.number.setText(number);
     }
+
     @Override
     public int getItemCount() {
-        return mRestaurants.size();
+        return restaurants.size();
     }
 
     public void update(List<Restaurant> restaurants) {
-        mRestaurants = restaurants;
+        this.restaurants = restaurants;
         notifyDataSetChanged();
+    }
+
+    public interface ClickListener {
+        void onItemClicked(int position);
+        boolean onItemLongClicked(int position);
     }
 }

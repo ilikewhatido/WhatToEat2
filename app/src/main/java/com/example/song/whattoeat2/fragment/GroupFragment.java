@@ -1,26 +1,23 @@
 package com.example.song.whattoeat2.fragment;
 
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.song.whattoeat2.R;
-import com.example.song.whattoeat2.database.DBAdapter;
 import com.example.song.whattoeat2.database.Group;
 
-public class Groups extends BaseFragment {
+public class GroupFragment extends BaseFragment {
 
     private RecyclerView mGroupsRecyclerView;
     private GroupAdapter mGroupAdapter;
 
-    public static Groups newInstance(int sectionNumber) {
-        Groups fragment = new Groups();
+    public static GroupFragment newInstance(int sectionNumber) {
+        GroupFragment fragment = new GroupFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

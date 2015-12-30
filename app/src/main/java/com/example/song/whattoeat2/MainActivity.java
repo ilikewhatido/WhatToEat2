@@ -1,7 +1,6 @@
 package com.example.song.whattoeat2;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,14 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
-import com.example.song.whattoeat2.fragment.AddGroupDialog;
-import com.example.song.whattoeat2.fragment.AddRestaurantDialog;
-import com.example.song.whattoeat2.fragment.Groups;
-import com.example.song.whattoeat2.fragment.Home;
-import com.example.song.whattoeat2.fragment.Restaurants;
+import com.example.song.whattoeat2.fragment.GroupFragment;
+import com.example.song.whattoeat2.fragment.HomeFragment;
+import com.example.song.whattoeat2.fragment.RestaurantFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             switch(Section.values()[position]) {
                 case HOME:
-                    return Home.newInstance(position);
+                    return HomeFragment.newInstance(position);
                 case GROUPS:
-                    return Groups.newInstance(position);
+                    return GroupFragment.newInstance(position);
                 case RESTAURANTS:
-                    return Restaurants.newInstance(position);
+                    return RestaurantFragment.newInstance(position);
                 default:
                     return null;
             }
