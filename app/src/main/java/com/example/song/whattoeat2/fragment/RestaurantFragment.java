@@ -28,11 +28,13 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_restaurants, container, false);
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -46,6 +48,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         mRestaurantsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         mActionModeCallback = new ActionModeCallback();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -58,16 +61,18 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
                 return true;
         }
     }
+
     public long addRestaurant(Restaurant restaurant) {
         return mDBAdapter.addRestaurant(restaurant);
     }
+
     public void updateUI() {
         mRestaurantAdapter.update(mDBAdapter.getRestaurants());
     }
 
     @Override
     public void onItemClicked(int position) {
-        if(mActionMode == null) {
+        if (mActionMode == null) {
             //TODO
             // Not in action mode... do the normal thing
         } else {
@@ -78,7 +83,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     @Override
     public boolean onItemLongClicked(int position) {
         if (mActionMode == null) {
-            mActionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(mActionModeCallback);
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
         }
         toggleSelection(position);
         return true;
@@ -96,11 +101,18 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         }
     }
 
+    @Override
+    public void closeActionMode() {
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
+    }
+
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate (R.menu.menu_remove, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_remove, menu);
             return true;
         }
 

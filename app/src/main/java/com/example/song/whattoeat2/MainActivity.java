@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
+import com.example.song.whattoeat2.fragment.BaseFragment;
 import com.example.song.whattoeat2.fragment.GroupFragment;
 import com.example.song.whattoeat2.fragment.HomeFragment;
 import com.example.song.whattoeat2.fragment.RestaurantFragment;
@@ -49,16 +51,45 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
         //mFab = (FloatingActionButton) findViewById(R.id.fab);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                int leftPosition = position - 1;
+                int rightPosition = position + 1;
+                if (leftPosition >= 0) {
+                    BaseFragment fragment = (BaseFragment) getSupportFragmentManager()
+                            .findFragmentByTag("android:switcher:" + mViewPager.getId() + ":" + leftPosition);
+                    fragment.closeActionMode();
+                }
+                if (rightPosition < mSectionsPagerAdapter.getCount()) {
+                    BaseFragment fragment = (BaseFragment) getSupportFragmentManager()
+                            .findFragmentByTag("android:switcher:" + mViewPager.getId() + ":" + rightPosition);
+                    fragment.closeActionMode();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     public enum Section {
         HOME, GROUPS, RESTAURANTS;
     }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -71,8 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
-            switch(Section.values()[position]) {
+            switch (Section.values()[position]) {
                 case HOME:
                     return HomeFragment.newInstance(position);
                 case GROUPS:
@@ -83,10 +113,12 @@ public class MainActivity extends AppCompatActivity {
                     return null;
             }
         }
+
         @Override
         public int getCount() {
             return Section.values().length;
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             switch (Section.values()[position]) {

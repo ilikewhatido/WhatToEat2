@@ -14,7 +14,7 @@ import com.example.song.whattoeat2.database.DBAdapter;
 /**
  * Created by Song on 2015/12/29.
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     public static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -30,4 +30,6 @@ public class BaseFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add, menu);
     }
+
+    public abstract void closeActionMode();
 }

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import com.example.song.whattoeat2.R;
 import com.example.song.whattoeat2.database.Group;
 
-public class GroupFragment extends BaseFragment  implements RecyclerViewClickListener {
+public class GroupFragment extends BaseFragment implements RecyclerViewClickListener {
 
     private RecyclerView mGroupsRecyclerView;
     private GroupAdapter mGroupAdapter;
@@ -28,11 +29,13 @@ public class GroupFragment extends BaseFragment  implements RecyclerViewClickLis
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_groups, container, false);
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -43,6 +46,7 @@ public class GroupFragment extends BaseFragment  implements RecyclerViewClickLis
         mGroupsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         mActionModeCallback = new ActionModeCallback();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -55,16 +59,18 @@ public class GroupFragment extends BaseFragment  implements RecyclerViewClickLis
                 return true;
         }
     }
+
     public long addGroup(Group group) {
         return mDBAdapter.addGroup(group);
     }
+
     public void updateUI() {
         mGroupAdapter.update(mDBAdapter.getGroups());
     }
 
     @Override
     public void onItemClicked(int position) {
-        if(mActionMode == null) {
+        if (mActionMode == null) {
             //TODO
             // Not in action mode... do the normal thing
         } else {
@@ -75,7 +81,7 @@ public class GroupFragment extends BaseFragment  implements RecyclerViewClickLis
     @Override
     public boolean onItemLongClicked(int position) {
         if (mActionMode == null) {
-            mActionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(mActionModeCallback);
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
         }
         toggleSelection(position);
         return true;
@@ -93,11 +99,18 @@ public class GroupFragment extends BaseFragment  implements RecyclerViewClickLis
         }
     }
 
+    @Override
+    public void closeActionMode() {
+        if(mActionMode != null) {
+            mActionMode.finish();
+        }
+    }
+
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate (R.menu.menu_remove, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_remove, menu);
             return true;
         }
 
