@@ -1,5 +1,6 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.RestauranyByGroup;
 import com.example.song.whattoeat2.database.Group;
 
 public class GroupFragment extends BaseFragment implements RecyclerViewClickListener {
@@ -73,6 +75,8 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
         if (mActionMode == null) {
             //TODO
             // Not in action mode... do the normal thing
+            Intent intent = new Intent(getActivity(), RestauranyByGroup.class);
+            startActivity(intent);
         } else {
             toggleSelection(position);
         }
