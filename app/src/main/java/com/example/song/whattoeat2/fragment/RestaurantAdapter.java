@@ -1,12 +1,9 @@
 package com.example.song.whattoeat2.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,7 @@ import java.util.List;
 public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewHolder> {
 
     private List<Restaurant> restaurants;
-    private ClickListener listener;
+    private RecyclerViewClickListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
@@ -31,9 +28,9 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         public TextView number;
         //public View selectedOverlay;
 
-        private ClickListener listener;
+        private RecyclerViewClickListener listener;
 
-        public ViewHolder(View itemView, ClickListener listener) {
+        public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.row_restaurant_name);
             number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
@@ -59,7 +56,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         }
     }
 
-    public RestaurantAdapter(List<Restaurant> mRestaurants, ClickListener listener) {
+    public RestaurantAdapter(List<Restaurant> mRestaurants, RecyclerViewClickListener listener) {
         this.restaurants = mRestaurants;
         this.listener = listener;
     }
@@ -96,11 +93,5 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
     public void update(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
         notifyDataSetChanged();
-    }
-
-    public interface ClickListener {
-        void onItemClicked(int position);
-
-        boolean onItemLongClicked(int position);
     }
 }
