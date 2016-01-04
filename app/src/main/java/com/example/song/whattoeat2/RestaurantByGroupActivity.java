@@ -80,7 +80,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
                 startActivity(intent);
                 return true;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
             default:
                 return true;

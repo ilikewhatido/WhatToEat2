@@ -66,15 +66,11 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                navigateUp();
+                finish();
                 return true;
             default:
                 return true;
         }
-    }
-
-    private void navigateUp() {
-        NavUtils.navigateUpFromSameTask(this);
     }
 
     @Override
@@ -129,7 +125,7 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
                         mDBAdapter.addRestaurantToGroupById(restaurantId, groupId);
                     }
                     mode.finish();
-                    navigateUp();
+                    finish();
                     return true;
                 default:
                     return false;
