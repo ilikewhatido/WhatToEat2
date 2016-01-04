@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.song.whattoeat2.R;
 import com.example.song.whattoeat2.database.Group;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,6 +67,15 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
     }
 
     @Override
+    public long getItemId(int position) {
+        return mGroups.get(position).getId();
+    }
+
+    public String getItemName(int position) {
+        return mGroups.get(position).getName();
+    }
+
+    @Override
     public int getItemCount() {
         return mGroups.size();
     }
@@ -73,5 +83,14 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
     public void update(List<Group> groups) {
         mGroups = groups;
         notifyDataSetChanged();
+    }
+
+    public List<Long> getSelectedItemIds() {
+        List<Long> ids = new ArrayList<>();
+        List<Integer> positions = getSelectedItems();
+        for (int i = 0; i < positions.size(); i++) {
+            ids.add(mGroups.get(positions.get(i)).getId());
+        }
+        return ids;
     }
 }

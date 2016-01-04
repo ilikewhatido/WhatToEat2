@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.song.whattoeat2.R;
-import com.example.song.whattoeat2.RestauranyByGroup;
+import com.example.song.whattoeat2.RestaurantByGroupActivity;
 import com.example.song.whattoeat2.database.Group;
 
 public class GroupFragment extends BaseFragment implements RecyclerViewClickListener {
@@ -23,6 +22,9 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
     private GroupAdapter mGroupAdapter;
     private ActionMode mActionMode;
     private ActionModeCallback mActionModeCallback;
+
+    public static final String BUNDLE_GROUP_ID = "bundle_group_id";
+    public static final String BUNDLE_GROUP_NAME = "bundle_group_name";
 
     public static GroupFragment newInstance(int sectionNumber) {
         GroupFragment fragment = new GroupFragment();
@@ -75,7 +77,11 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
         if (mActionMode == null) {
             //TODO
             // Not in action mode... do the normal thing
-            Intent intent = new Intent(getActivity(), RestauranyByGroup.class);
+            Bundle extra = new Bundle();
+            extra.putLong(BUNDLE_GROUP_ID, mGroupAdapter.getItemId(position));
+            extra.putString(BUNDLE_GROUP_NAME, mGroupAdapter.getItemName(position));
+            Intent intent = new Intent(getActivity(), RestaurantByGroupActivity.class);
+            intent.putExtras(extra);
             startActivity(intent);
         } else {
             toggleSelection(position);

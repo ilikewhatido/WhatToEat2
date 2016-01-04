@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.song.whattoeat2.R;
 import com.example.song.whattoeat2.database.Restaurant;
+
+import java.util.List;
 
 public class RestaurantFragment extends BaseFragment implements RecyclerViewClickListener {
 
@@ -125,8 +128,8 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_remove_remove_item:
-                    //TODO
-                    mRestaurantAdapter.getSelectedItems();
+                    mDBAdapter.removeRestaurantsById(mRestaurantAdapter.getSelectedItemIds());
+                    updateUI();
                     mode.finish();
                     return true;
                 default:

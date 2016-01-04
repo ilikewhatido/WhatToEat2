@@ -86,9 +86,10 @@ public class DBAdapter {
             cursor = mSQLiteDatabase.query(TABLE_RESTAURANT, columns, null, null, null, null, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(RESTAURANT_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
                 String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
-                Restaurant restaurant = new Restaurant(name, number);
+                Restaurant restaurant = new Restaurant(id, name, number);
                 list.add(restaurant);
                 cursor.moveToNext();
             }
@@ -120,10 +121,10 @@ public class DBAdapter {
         Log.d(getClass().getName(), "unlinkRestaurantFromGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT_GROUP, whereClause, null);
     }
-    public void removeRestaurantsById(long[] ids) {
-        String[] idsToDelete = new String[ids.length];
-        for(int i = 0; i < ids.length; i++)
-            idsToDelete[i] = String.valueOf(ids[i]);
+    public void removeRestaurantsById(List<Long> ids) {
+        String[] idsToDelete = new String[ids.size()];
+        for(int i = 0; i < ids.size(); i++)
+            idsToDelete[i] = String.valueOf(ids.get(i));
         String whereClause = RESTAURANT_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
         Log.d(getClass().getName(), "deleteRestaurants" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT, whereClause, null);
@@ -142,7 +143,8 @@ public class DBAdapter {
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
                 String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
-                Restaurant restaurant = new Restaurant(name, number);
+                Long restaurantId = cursor.getLong(cursor.getColumnIndexOrThrow(RESTAURANT_ID));
+                Restaurant restaurant = new Restaurant(restaurantId, name, number);
                 restaurants.add(restaurant);
                 cursor.moveToNext();
             }
@@ -166,7 +168,8 @@ public class DBAdapter {
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
                 String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
-                Restaurant restaurant = new Restaurant(name, number);
+                Long restaurantId = cursor.getLong(cursor.getColumnIndexOrThrow(RESTAURANT_ID));
+                Restaurant restaurant = new Restaurant(restaurantId, name, number);
                 restaurants.add(restaurant);
                 cursor.moveToNext();
             }

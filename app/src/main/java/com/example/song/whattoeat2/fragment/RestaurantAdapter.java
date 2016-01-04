@@ -1,9 +1,11 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.example.song.whattoeat2.R;
 import com.example.song.whattoeat2.database.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +22,7 @@ import java.util.List;
  */
 public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewHolder> {
 
-    private List<Restaurant> restaurants;
+    private List<Restaurant> mRestaurants;
     private RecyclerViewClickListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -57,7 +60,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
     }
 
     public RestaurantAdapter(List<Restaurant> mRestaurants, RecyclerViewClickListener listener) {
-        this.restaurants = mRestaurants;
+        this.mRestaurants = mRestaurants;
         this.listener = listener;
     }
 
@@ -69,14 +72,22 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String name = restaurants.get(position).getName();
-        String number = restaurants.get(position).getNumber();
+        String name = mRestaurants.get(position).getName();
+        String number = mRestaurants.get(position).getNumber();
         holder.name.setText(name);
         holder.number.setText(number);
 
         // Highlight selected item
-        Context context = ((Fragment)listener).getActivity();
-        if(isSelected(position)) {
+        Context context;
+        // is Activity
+        if (listener instanceof Activity) {
+            context = (Activity) listener;
+        // is Fragment
+        } else {
+            context = ((Fragment) listener).getActivity();
+        }
+
+        if (isSelected(position)) {
             holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
             holder.number.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
@@ -87,11 +98,25 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
 
     @Override
     public int getItemCount() {
-        return restaurants.size();
+        return mRestaurants.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mRestaurants.get(position).getId();
+    }
+
+    public List<Long> getSelectedItemIds() {
+        List<Long> ids = new ArrayList<>();
+        List<Integer> positions = getSelectedItems();
+        for(int i = 0; i < positions.size(); i++) {
+            ids.add(mRestaurants.get(positions.get(i)).getId());
+        }
+        return ids;
     }
 
     public void update(List<Restaurant> restaurants) {
-        this.restaurants = restaurants;
+        mRestaurants = restaurants;
         notifyDataSetChanged();
     }
 }
