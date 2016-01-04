@@ -3,6 +3,7 @@ package com.example.song.whattoeat2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,9 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
     private long groupId;
     private String groupName;
 
+    private ActionMode mActionMode;
+    private ActionModeCallback mActionModeCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,12 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         groupId = getIntent().getExtras().getLong(GroupFragment.BUNDLE_GROUP_ID);
         groupName = getIntent().getExtras().getString(GroupFragment.BUNDLE_GROUP_NAME);
         setUpToolbar();
+        mActionModeCallback = new ActionModeCallback();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setUpRecyclerView();
     }
 
@@ -79,11 +89,65 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
 
     @Override
     public void onItemClicked(int position) {
+        if (mActionMode == null) {
+            //TODO
+            // Not in action mode... do the normal thing
+        } else {
+            toggleSelection(position);
+        }
+    }
 
+    private void toggleSelection(int position) {
+        mRestaurantAdapter.toggleSelection(position);
+        int total = mRestaurantAdapter.getItemCount();
+        int count = mRestaurantAdapter.getSelectedItemCount();
+        if (count == 0) {
+            mActionMode.finish();
+        } else {
+            mActionMode.setTitle(count + "/" + total);
+            mActionMode.invalidate();
+        }
     }
 
     @Override
     public boolean onItemLongClicked(int position) {
-        return false;
+        if (mActionMode == null) {
+            mActionMode = startSupportActionMode(mActionModeCallback);
+        }
+        toggleSelection(position);
+        return true;
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_remove, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_remove_remove_item:
+                    mDBAdapter.removeRestaurantFromGroupById(mRestaurantAdapter.getSelectedItemIds(), groupId);
+                    mRestaurantAdapter.update(mDBAdapter.getRestaurantsByGroupId(groupId));
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mRestaurantAdapter.clearSelection();
+            mActionMode = null;
+        }
     }
 }

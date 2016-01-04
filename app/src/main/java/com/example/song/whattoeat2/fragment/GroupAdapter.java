@@ -1,5 +1,9 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +68,21 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = mGroups.get(position).getName();
         holder.mName.setText(name);
+
+        // Highlight selected item
+        Context context;
+        // is Activity
+        if (listener instanceof Activity) {
+            context = (Activity) listener;
+            // is Fragment
+        } else {
+            context = ((Fragment) listener).getActivity();
+        }
+        if (isSelected(position)) {
+            holder.mName.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        } else {
+            holder.mName.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
+        }
     }
 
     @Override

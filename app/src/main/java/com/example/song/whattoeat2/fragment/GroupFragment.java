@@ -134,8 +134,10 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
             switch (item.getItemId()) {
                 case R.id.menu_remove_remove_item:
                     //TODO
-                    mGroupAdapter.getSelectedItems();
+                    // DELETE GROUP
+                    mDBAdapter.removeGroupsById(mGroupAdapter.getSelectedItemIds());
                     mode.finish();
+                    updateUI();
                     return true;
                 default:
                     return false;

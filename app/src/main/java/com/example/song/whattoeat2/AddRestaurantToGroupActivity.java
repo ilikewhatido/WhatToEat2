@@ -1,5 +1,6 @@
 package com.example.song.whattoeat2;
 
+import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
@@ -34,6 +35,10 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
         setUpRecyclerView();
 
         groupId = getIntent().getExtras().getLong(RestaurantByGroupActivity.BUNDLE_GROUP_ID);
+
+        Log.e("wawawa", "groupId=" + groupId);
+
+
         mActionModeCallback = new ActionModeCallback();
     }
 
@@ -61,11 +66,15 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                navigateUp();
                 return true;
             default:
                 return true;
         }
+    }
+
+    private void navigateUp() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     @Override
@@ -117,11 +126,10 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
             switch (item.getItemId()) {
                 case R.id.menu_add_add_item:
                     for(Long restaurantId : mRestaurantAdapter.getSelectedItemIds()) {
-                        Log.e("wawawa", "restaurantId=" + restaurantId);
                         mDBAdapter.addRestaurantToGroupById(restaurantId, groupId);
                     }
                     mode.finish();
-                    mRestaurantAdapter.update(mDBAdapter.getRestaurantsNotInGroup(groupId));
+                    navigateUp();
                     return true;
                 default:
                     return false;

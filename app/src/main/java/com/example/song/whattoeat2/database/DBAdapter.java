@@ -89,7 +89,8 @@ public class DBAdapter {
                 Long id = cursor.getLong(cursor.getColumnIndexOrThrow(RESTAURANT_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
                 String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
-                Restaurant restaurant = new Restaurant(id, name, number);
+                Long restaurantId = cursor.getLong(cursor.getColumnIndexOrThrow(RESTAURANT_ID));
+                Restaurant restaurant = new Restaurant(restaurantId, name, number);
                 list.add(restaurant);
                 cursor.moveToNext();
             }
@@ -99,24 +100,27 @@ public class DBAdapter {
         }
         return list;
     }
-    public void deleteGroupsById(long[] ids) {
-        String[] idsToDelete = new String[ids.length];
-        for(int i = 0; i < ids.length; i++)
-            idsToDelete[i] = String.valueOf(ids[i]);
+    public void removeGroupsById(List<Long> ids) {
+        String[] idsToDelete = new String[ids.size()];
+        for(int i = 0; i < ids.size(); i++)
+            idsToDelete[i] = String.valueOf(ids.get(i));
         String whereClause = GROUP_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
         Log.d(getClass().getName(), "deleteRestaurantByGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_CIRCLE, whereClause, null);
     }
     public long addRestaurantToGroupById(long restaurantId, long circleId) {
+
+        Log.e("wawawa", "addRestaurantToGroupById: " + "restaurantId=" + restaurantId + ", circleId=" + circleId );
+
         ContentValues cv = new ContentValues();
         cv.put(RESTAURANT_GROUP_RESTAURANT_ID, restaurantId);
         cv.put(RESTAURANT_GROUP_GROUP_ID, circleId);
         return mSQLiteDatabase.insert(TABLE_RESTAURANT_GROUP, null, cv);
     }
-    public void removeRestaurantFromGroupById(long[] restaurantIds, long circleId) {
-        String[] idsToDelete = new String[restaurantIds.length];
-        for(int i = 0; i < restaurantIds.length; i++)
-            idsToDelete[i] = String.valueOf(restaurantIds[i]);
+    public void removeRestaurantFromGroupById(List<Long> restaurantIds, long circleId) {
+        String[] idsToDelete = new String[restaurantIds.size()];
+        for(int i = 0; i < restaurantIds.size(); i++)
+            idsToDelete[i] = String.valueOf(restaurantIds.get(i));
         String whereClause = RESTAURANT_GROUP_GROUP_ID + " = " + circleId + " AND " + RESTAURANT_GROUP_RESTAURANT_ID + " IN (" + TextUtils.join(",", idsToDelete) + ")";
         Log.d(getClass().getName(), "unlinkRestaurantFromGroup" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT_GROUP, whereClause, null);
@@ -188,7 +192,8 @@ public class DBAdapter {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(GROUP_NAME));
-                Group group = new Group(name);
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(GROUP_ID));
+                Group group = new Group(id, name);
                 groups.add(group);
                 cursor.moveToNext();
             }
