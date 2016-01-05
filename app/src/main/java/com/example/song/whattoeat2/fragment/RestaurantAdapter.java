@@ -28,7 +28,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView name;
-        public TextView number;
+        //public TextView number;
         //public View selectedOverlay;
 
         private RecyclerViewClickListener listener;
@@ -36,7 +36,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.row_restaurant_name);
-            number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
+            //number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
             //selectedOverlay = itemView.findViewById(R.id.row_restaurant_selected_overlay);
             this.listener = listener;
             itemView.setOnClickListener(this);
@@ -75,7 +75,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         String name = mRestaurants.get(position).getName();
         String number = mRestaurants.get(position).getNumber();
         holder.name.setText(name);
-        holder.number.setText(number);
+        //holder.number.setText(number);
 
         // Highlight selected item
         Context context;
@@ -89,10 +89,10 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
 
         if (isSelected(position)) {
             holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-            holder.number.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            //holder.number.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
             holder.name.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
-            holder.number.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+            //holder.number.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
         }
     }
 

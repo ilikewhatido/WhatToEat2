@@ -6,18 +6,8 @@
 
     <TextView
         android:id="@+id/row_restaurant_name"
+        style="@style/RecyclerViewRowTextStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/textColorPrimary" />
-
-    <TextView
-        android:id="@+id/row_restaurant_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/textColorSecondary" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

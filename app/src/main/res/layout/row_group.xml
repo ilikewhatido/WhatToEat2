@@ -5,10 +5,8 @@
 
     <TextView
         android:id="@+id/row_group_name"
+        style="@style/RecyclerViewRowTextStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/textColorPrimary" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
