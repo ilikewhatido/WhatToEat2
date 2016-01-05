@@ -9,7 +9,6 @@
 
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
-
         <item name="android:windowBackground">@color/windowBackground</item>
 
         <!-- "actionModeStyle" controls the style -->

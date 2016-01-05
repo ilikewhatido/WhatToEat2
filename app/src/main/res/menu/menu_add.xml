@@ -7,7 +7,7 @@
         android:id="@+id/menu_add_add_item"
         android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="1"
-        android:title="Add"
+        android:title="加入"
         app:showAsAction="always" />
 
 </menu>
