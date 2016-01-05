@@ -28,6 +28,7 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView name;
+        public View view;
         //public TextView number;
         //public View selectedOverlay;
 
@@ -36,6 +37,8 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.row_restaurant_name);
+            view = itemView;
+
             //number = (TextView) itemView.findViewById(R.id.row_restaurant_number);
             //selectedOverlay = itemView.findViewById(R.id.row_restaurant_selected_overlay);
             this.listener = listener;
@@ -88,11 +91,11 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         }
 
         if (isSelected(position)) {
-            holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-            //holder.number.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            holder.name.setTextColor(ContextCompat.getColor(context, R.color.windowBackground));
+            holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
             holder.name.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
-            //holder.number.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+            holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.windowBackground));
         }
     }
 

@@ -27,11 +27,13 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView mName;
+        public View mView;
         private RecyclerViewClickListener listener;
 
         public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             mName = (TextView) itemView.findViewById(R.id.row_group_name);
+            mView = itemView;
             this.listener = listener;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -79,9 +81,11 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
             context = ((Fragment) listener).getActivity();
         }
         if (isSelected(position)) {
-            holder.mName.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            holder.mName.setTextColor(ContextCompat.getColor(context, R.color.windowBackground));
+            holder.mView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
             holder.mName.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
+            holder.mView.setBackgroundColor(ContextCompat.getColor(context, R.color.windowBackground));
         }
     }
 

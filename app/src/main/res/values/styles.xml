@@ -7,18 +7,23 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+
         <!-- "actionModeStyle" controls the style -->
         <item name="actionModeStyle">@style/ActionModeStyle</item>
     </style>
 
     <style name="RecyclerViewRowTextStyle">
-        <item name="android:padding">4dp</item>
+        <item name="android:padding">8dp</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
     <style name="ActionModeStyle" parent="Base.Widget.AppCompat.ActionMode">
-        <item name="background">@color/colorAccent</item>
+        <item name="background">@color/windowBackground</item>
         <item name="backgroundSplit">?attr/actionModeSplitBackground</item>
         <item name="height">?attr/actionBarSize</item>
         <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Title</item>
@@ -34,7 +39,7 @@
         <item name="tabPaddingEnd">12dp</item>
         <item name="tabGravity">fill</item>
         <item name="tabMode">fixed</item>
-        <item name="tabBackground">@color/test</item>
+        <item name="tabBackground">@color/windowBackground</item>
         <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
