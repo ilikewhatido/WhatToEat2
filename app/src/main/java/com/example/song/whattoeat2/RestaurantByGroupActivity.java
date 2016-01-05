@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.song.whattoeat2.fragment.GroupFragment;
 import com.example.song.whattoeat2.fragment.RecyclerViewClickListener;
@@ -35,8 +36,9 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         setContentView(R.layout.activity_restaurany_by_group);
         groupId = getIntent().getExtras().getLong(GroupFragment.BUNDLE_GROUP_ID);
         groupName = getIntent().getExtras().getString(GroupFragment.BUNDLE_GROUP_NAME);
-        setUpToolbar();
         mActionModeCallback = new ActionModeCallback();
+        setupToolbar();
+        setupTitle();
     }
 
     @Override
@@ -45,12 +47,16 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         setUpRecyclerView();
     }
 
-    private void setUpToolbar() {
+    private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setSubtitle("GROUPS > " + groupName);
+    }
+
+    private void setupTitle() {
+        TextView title = (TextView) findViewById(R.id.restaurant_by_group_title);
+        title.setText("群組 > " + groupName);
     }
 
     private void setUpRecyclerView() {
@@ -104,7 +110,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         if (count == 0) {
             mActionMode.finish();
         } else {
-            mActionMode.setTitle(count + "/" + total);
+            mActionMode.setTitle(count + "/" + total + "  加入群組");
             mActionMode.invalidate();
         }
     }

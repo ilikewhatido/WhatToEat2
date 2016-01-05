@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.song.whattoeat2.fragment.RecyclerViewClickListener;
 import com.example.song.whattoeat2.fragment.RestaurantAdapter;
@@ -26,35 +27,33 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
     private ActionModeCallback mActionModeCallback;
 
     private long groupId;
+    private String groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_restaurant_to_group);
+        groupId = getIntent().getExtras().getLong(RestaurantByGroupActivity.BUNDLE_GROUP_ID);
+        groupName = getIntent().getExtras().getString(RestaurantByGroupActivity.BUNDLE_GROUP_NAME);
+        mActionModeCallback = new ActionModeCallback();
         setUpToolbar();
         setUpRecyclerView();
-
-        groupId = getIntent().getExtras().getLong(RestaurantByGroupActivity.BUNDLE_GROUP_ID);
-
-        Log.e("wawawa", "groupId=" + groupId);
-
-
-        mActionModeCallback = new ActionModeCallback();
+        setupTitle();
     }
 
     private void setUpToolbar() {
-        Bundle bundle = getIntent().getExtras();
-        String groupName = bundle.getString(RestaurantByGroupActivity.BUNDLE_GROUP_NAME);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setSubtitle("Adding restaurants to " + groupName);
+    }
+
+    private void setupTitle() {
+        TextView title = (TextView) findViewById(R.id.add_restaurant_to_group_title);
+        title.setText("群組 > " + groupName);
     }
 
     private void setUpRecyclerView() {
-        Bundle bundle = getIntent().getExtras();
-        long groupId = bundle.getLong(RestaurantByGroupActivity.BUNDLE_GROUP_ID);
         mRestaurantsRecyclerView = (RecyclerView) findViewById(R.id.add_restaurant_to_group_list);
         mRestaurantAdapter = new RestaurantAdapter(mDBAdapter.getRestaurantsNotInGroup(groupId), this);
         mRestaurantsRecyclerView.setAdapter(mRestaurantAdapter);
@@ -99,7 +98,7 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
         if (count == 0) {
             mActionMode.finish();
         } else {
-            mActionMode.setTitle(count + "/" + total);
+            mActionMode.setTitle(count + "/" + total + "  加入群組");
             mActionMode.invalidate();
         }
     }
