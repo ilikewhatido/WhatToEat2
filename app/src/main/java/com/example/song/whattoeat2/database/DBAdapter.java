@@ -109,9 +109,6 @@ public class DBAdapter {
         mSQLiteDatabase.delete(TABLE_CIRCLE, whereClause, null);
     }
     public long addRestaurantToGroupById(long restaurantId, long circleId) {
-
-        Log.e("wawawa", "addRestaurantToGroupById: " + "restaurantId=" + restaurantId + ", circleId=" + circleId );
-
         ContentValues cv = new ContentValues();
         cv.put(RESTAURANT_GROUP_RESTAURANT_ID, restaurantId);
         cv.put(RESTAURANT_GROUP_GROUP_ID, circleId);

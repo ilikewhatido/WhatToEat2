@@ -59,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                BaseFragment fragment = getCurrentFragment();
-                fragment.closeActionMode();
+
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                BaseFragment fragment = getCurrentFragment();
+                fragment.closeActionMode();
             }
         });
     }

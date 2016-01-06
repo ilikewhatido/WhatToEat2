@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,10 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
 
     private RecyclerView mRestaurantsRecyclerView;
     private RestaurantAdapter mRestaurantAdapter;
-    private ActionMode mActionMode;
-    private ActionModeCallback mActionModeCallback;
+
+    private boolean mSelectionMode = false;
+    private MenuItem mAddButton;
+    private Toolbar mToolbar;
 
     public static RestaurantFragment newInstance(int sectionNumber) {
         RestaurantFragment fragment = new RestaurantFragment();
@@ -39,35 +43,75 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     }
 
     @Override
-    public boolean closeActionMode() {
-        return false;
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mRestaurantsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_restaurants_list);
-
-        // TODO
-        // https://www.bignerdranch.com/blog/recyclerview-part-2-choice-modes/
         mRestaurantAdapter = new RestaurantAdapter(dbAdapter.getRestaurants(), this);
         mRestaurantsRecyclerView.setAdapter(mRestaurantAdapter);
         mRestaurantsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRestaurantsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        mActionModeCallback = new ActionModeCallback();
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mAddButton = menu.findItem(R.id.menu_action_mode_action);
+        mAddButton.setTitle("新增");
+        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+    }
+
+    @Override
+    public boolean closeActionMode() {
+        if(mSelectionMode) {
+            closeSelection();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_action_mode_action:
-                AddRestaurantDialog dialog = new AddRestaurantDialog();
-                dialog.setTargetFragment(this, 0);
-                dialog.show(getActivity().getSupportFragmentManager(), AddRestaurantDialog.TAG);
+                if(!mSelectionMode) {
+                    //Adding new restaurant
+                    AddRestaurantDialog dialog = new AddRestaurantDialog();
+                    dialog.setTargetFragment(this, 0);
+                    dialog.show(getActivity().getSupportFragmentManager(), AddRestaurantDialog.TAG);
+                    return true;
+                } else {
+                    // Deleting selected restaurants
+                    dbAdapter.removeRestaurantsById(mRestaurantAdapter.getSelectedItemIds());
+                    updateUI();
+                    closeSelection();
+                }
+                return true;
+            case android.R.id.home:
+                closeSelection();
                 return true;
             default:
                 return true;
         }
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        if (!mSelectionMode) {
+            //TODO
+            // Not in action mode... do the normal thing
+        } else {
+            toggleSelection(position);
+        }
+    }
+
+    @Override
+    public boolean onItemLongClicked(int position) {
+        if (!mSelectionMode) {
+            openSelection();
+        }
+        toggleSelection(position);
+        return true;
     }
 
     public long addRestaurant(Restaurant restaurant) {
@@ -78,23 +122,22 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         mRestaurantAdapter.update(dbAdapter.getRestaurants());
     }
 
-    @Override
-    public void onItemClicked(int position) {
-        if (mActionMode == null) {
-            //TODO
-            // Not in action mode... do the normal thing
-        } else {
-            toggleSelection(position);
-        }
+    private void openSelection() {
+        mSelectionMode = true;
+        mAddButton.setTitle("刪除");
+        mAddButton.setIcon(android.R.drawable.ic_menu_delete);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    public boolean onItemLongClicked(int position) {
-        if (mActionMode == null) {
-            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-        }
-        toggleSelection(position);
-        return true;
+    private void closeSelection() {
+        mRestaurantAdapter.clearSelection();
+        mSelectionMode = false;
+        mAddButton.setTitle("新增");
+        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mToolbar.setTitle("WhatToEat2");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void toggleSelection(int position) {
@@ -102,43 +145,9 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         int total = mRestaurantAdapter.getItemCount();
         int count = mRestaurantAdapter.getSelectedItemCount();
         if (count == 0) {
-            mActionMode.finish();
+            closeSelection();
         } else {
-            mActionMode.setTitle(count + "/" + total);
-            mActionMode.invalidate();
-        }
-    }
-
-    private class ActionModeCallback implements ActionMode.Callback {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_action_mode_action:
-                    dbAdapter.removeRestaurantsById(mRestaurantAdapter.getSelectedItemIds());
-                    updateUI();
-                    mode.finish();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mRestaurantAdapter.clearSelection();
-            mActionMode = null;
+            mToolbar.setTitle(count + "/" + total);
         }
     }
 }
