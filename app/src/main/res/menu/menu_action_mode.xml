@@ -4,10 +4,9 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/menu_add_add_item"
-        android:icon="@android:drawable/ic_menu_add"
+        android:id="@+id/menu_action_mode_action"
         android:orderInCategory="1"
-        android:title="加入"
-        app:showAsAction="always" />
+        android:title="default"
+        app:showAsAction="always|withText" />
 
 </menu>

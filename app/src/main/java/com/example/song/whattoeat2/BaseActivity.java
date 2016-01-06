@@ -12,12 +12,12 @@ import com.example.song.whattoeat2.fragment.RecyclerViewClickListener;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    protected DBAdapter mDBAdapter;
+    protected DBAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDBAdapter = new DBAdapter(this);
+        dbAdapter = new DBAdapter(this);
     }
 
     @Override

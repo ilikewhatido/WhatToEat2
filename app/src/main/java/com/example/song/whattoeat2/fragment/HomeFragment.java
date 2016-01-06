@@ -23,7 +23,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void closeActionMode() {
-        // DO NOTHING
+    public boolean closeActionMode() {
+        return false;
     }
 }

@@ -20,14 +20,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"></android.support.v7.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/restaurant_by_group_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/restaurant_by_group_list"
             android:layout_width="match_parent"

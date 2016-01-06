@@ -39,13 +39,18 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     }
 
     @Override
+    public boolean closeActionMode() {
+        return false;
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mRestaurantsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_restaurants_list);
 
         // TODO
         // https://www.bignerdranch.com/blog/recyclerview-part-2-choice-modes/
-        mRestaurantAdapter = new RestaurantAdapter(mDBAdapter.getRestaurants(), this);
+        mRestaurantAdapter = new RestaurantAdapter(dbAdapter.getRestaurants(), this);
         mRestaurantsRecyclerView.setAdapter(mRestaurantAdapter);
         mRestaurantsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRestaurantsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
@@ -55,7 +60,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_add_item:
+            case R.id.menu_action_mode_action:
                 AddRestaurantDialog dialog = new AddRestaurantDialog();
                 dialog.setTargetFragment(this, 0);
                 dialog.show(getActivity().getSupportFragmentManager(), AddRestaurantDialog.TAG);
@@ -66,11 +71,11 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     }
 
     public long addRestaurant(Restaurant restaurant) {
-        return mDBAdapter.addRestaurant(restaurant);
+        return dbAdapter.addRestaurant(restaurant);
     }
 
     public void updateUI() {
-        mRestaurantAdapter.update(mDBAdapter.getRestaurants());
+        mRestaurantAdapter.update(dbAdapter.getRestaurants());
     }
 
     @Override
@@ -104,18 +109,11 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         }
     }
 
-    @Override
-    public void closeActionMode() {
-        if (mActionMode != null) {
-            mActionMode.finish();
-        }
-    }
-
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_remove, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             return true;
         }
 
@@ -127,8 +125,8 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.menu_remove_remove_item:
-                    mDBAdapter.removeRestaurantsById(mRestaurantAdapter.getSelectedItemIds());
+                case R.id.menu_action_mode_action:
+                    dbAdapter.removeRestaurantsById(mRestaurantAdapter.getSelectedItemIds());
                     updateUI();
                     mode.finish();
                     return true;

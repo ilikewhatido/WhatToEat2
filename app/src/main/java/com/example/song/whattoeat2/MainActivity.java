@@ -59,18 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                int leftPosition = position - 1;
-                int rightPosition = position + 1;
-                if (leftPosition >= 0) {
-                    BaseFragment fragment = (BaseFragment) getSupportFragmentManager()
-                            .findFragmentByTag("android:switcher:" + mViewPager.getId() + ":" + leftPosition);
-                    fragment.closeActionMode();
-                }
-                if (rightPosition < mSectionsPagerAdapter.getCount()) {
-                    BaseFragment fragment = (BaseFragment) getSupportFragmentManager()
-                            .findFragmentByTag("android:switcher:" + mViewPager.getId() + ":" + rightPosition);
-                    fragment.closeActionMode();
-                }
+                BaseFragment fragment = getCurrentFragment();
+                fragment.closeActionMode();
             }
 
             @Override
@@ -81,9 +71,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        BaseFragment fragment = getCurrentFragment();
+        if (!fragment.closeActionMode()) {
+            super.onBackPressed();
+        }
+    }
+
+    private BaseFragment getCurrentFragment() {
+        int index = mViewPager.getCurrentItem();
+        return (BaseFragment) getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + mViewPager.getId() + ":" + index);
     }
 
     public enum Section {

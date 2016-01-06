@@ -3,11 +3,13 @@ package com.example.song.whattoeat2.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +20,19 @@ import com.example.song.whattoeat2.database.Group;
 
 public class GroupFragment extends BaseFragment implements RecyclerViewClickListener {
 
-    private RecyclerView mGroupsRecyclerView;
-    private GroupAdapter mGroupAdapter;
-    private ActionMode mActionMode;
-    private ActionModeCallback mActionModeCallback;
-
     public static final String BUNDLE_GROUP_ID = "bundle_group_id";
     public static final String BUNDLE_GROUP_NAME = "bundle_group_name";
 
+    private RecyclerView mGroupsRecyclerView;
+    private GroupAdapter mGroupAdapter;
+    private boolean mSelectionMode = false;
+    private MenuItem mAddButton;
+    private Toolbar mToolbar;
+
     public static GroupFragment newInstance(int sectionNumber) {
-        GroupFragment fragment = new GroupFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        GroupFragment fragment = new GroupFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,40 +46,63 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mGroupAdapter = new GroupAdapter(mDBAdapter.getGroups(), this);
+        mGroupAdapter = new GroupAdapter(dbAdapter.getGroups(), this);
         mGroupsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_groups_list);
         mGroupsRecyclerView.setAdapter(mGroupAdapter);
         mGroupsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mGroupsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        mActionModeCallback = new ActionModeCallback();
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mAddButton = menu.findItem(R.id.menu_action_mode_action);
+        mAddButton.setTitle("新增");
+        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+    }
+
+    @Override
+    public boolean closeActionMode() {
+        if(mSelectionMode) {
+            closeSelection();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_add_item:
-                AddGroupDialog dialog = new AddGroupDialog();
-                dialog.setTargetFragment(this, 0);
-                dialog.show(getActivity().getSupportFragmentManager(), AddGroupDialog.TAG);
+            case R.id.menu_action_mode_action:
+                //TODO
+                // 新增
+                if (!mSelectionMode) {
+                    AddGroupDialog dialog = new AddGroupDialog();
+                    dialog.setTargetFragment(this, 0);
+                    dialog.show(getActivity().getSupportFragmentManager(), AddGroupDialog.TAG);
+                    return true;
+                    // 刪除
+                } else {
+                    dbAdapter.removeGroupsById(mGroupAdapter.getSelectedItemIds());
+                    updateUI();
+                    closeSelection();
+                }
+                return true;
+            // Home back button
+            case android.R.id.home:
+                closeSelection();
                 return true;
             default:
                 return true;
         }
     }
 
-    public long addGroup(Group group) {
-        return mDBAdapter.addGroup(group);
-    }
-
-    public void updateUI() {
-        mGroupAdapter.update(mDBAdapter.getGroups());
-    }
-
     @Override
     public void onItemClicked(int position) {
-        if (mActionMode == null) {
+        if (!mSelectionMode) {
             //TODO
-            // Not in action mode... do the normal thing
+            // Not in action mode... open new activity
             Bundle extra = new Bundle();
             extra.putLong(BUNDLE_GROUP_ID, mGroupAdapter.getItemId(position));
             extra.putString(BUNDLE_GROUP_NAME, mGroupAdapter.getItemName(position));
@@ -90,11 +116,37 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
 
     @Override
     public boolean onItemLongClicked(int position) {
-        if (mActionMode == null) {
-            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+        if (!mSelectionMode) {
+            openSelection();
         }
         toggleSelection(position);
         return true;
+    }
+
+    public long addGroup(Group group) {
+        return dbAdapter.addGroup(group);
+    }
+
+    public void updateUI() {
+        mGroupAdapter.update(dbAdapter.getGroups());
+    }
+
+    private void openSelection() {
+        mSelectionMode = true;
+        mAddButton.setTitle("刪除");
+        mAddButton.setIcon(android.R.drawable.ic_menu_delete);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void closeSelection() {
+        mGroupAdapter.clearSelection();
+        mSelectionMode = false;
+        mAddButton.setTitle("新增");
+        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mToolbar.setTitle("WhatToEat2");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void toggleSelection(int position) {
@@ -102,52 +154,9 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
         int total = mGroupAdapter.getItemCount();
         int count = mGroupAdapter.getSelectedItemCount();
         if (count == 0) {
-            mActionMode.finish();
+            closeSelection();
         } else {
-            mActionMode.setTitle(count + "/" + total);
-            mActionMode.invalidate();
-        }
-    }
-
-    @Override
-    public void closeActionMode() {
-        if(mActionMode != null) {
-            mActionMode.finish();
-        }
-    }
-
-    private class ActionModeCallback implements ActionMode.Callback {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_remove, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_remove_remove_item:
-                    //TODO
-                    // DELETE GROUP
-                    mDBAdapter.removeGroupsById(mGroupAdapter.getSelectedItemIds());
-                    mode.finish();
-                    updateUI();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mGroupAdapter.clearSelection();
-            mActionMode = null;
+            mToolbar.setTitle(count + "/" + total);
         }
     }
 }

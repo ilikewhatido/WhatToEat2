@@ -18,18 +18,21 @@ public abstract class BaseFragment extends Fragment {
 
     public static final String ARG_SECTION_NUMBER = "section_number";
 
-    protected DBAdapter mDBAdapter;
+    protected DBAdapter dbAdapter;
+    protected Menu menu;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        mDBAdapter = new DBAdapter(getActivity());
+        dbAdapter = new DBAdapter(getActivity());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_add, menu);
+        inflater.inflate(R.menu.menu_action_mode, menu);
+        this.menu = menu;
     }
 
-    public abstract void closeActionMode();
+    public abstract boolean closeActionMode();
 }
