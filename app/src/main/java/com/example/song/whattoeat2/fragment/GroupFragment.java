@@ -59,7 +59,7 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
         super.onCreateOptionsMenu(menu, inflater);
         mAddButton = menu.findItem(R.id.menu_action_mode_action);
         mAddButton.setTitle("新增");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
     private void openSelection() {
         mSelectionMode = true;
         mAddButton.setTitle("刪除");
-        mAddButton.setIcon(android.R.drawable.ic_menu_delete);
+        mAddButton.setIcon(R.drawable.delete);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -143,7 +143,7 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
         mGroupAdapter.clearSelection();
         mSelectionMode = false;
         mAddButton.setTitle("新增");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
         mToolbar.setTitle("WhatToEat2");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);

@@ -37,7 +37,7 @@ public class AddRestaurantToGroupActivity extends BaseActivity implements Recycl
         mMenu = menu;
         mAddButton = mMenu.findItem(R.id.menu_action_mode_action);
         mAddButton.setTitle("加入");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
         mAddButton.setVisible(false);
         return true;
     }

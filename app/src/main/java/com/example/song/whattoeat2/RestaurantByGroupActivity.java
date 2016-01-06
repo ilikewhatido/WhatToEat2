@@ -48,7 +48,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         mMenu = menu;
         mAddButton = mMenu.findItem(R.id.menu_action_mode_action);
         mAddButton.setTitle("加入餐廳");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
         return true;
     }
 
@@ -115,14 +115,14 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
     private void openSelection() {
         mSelectionMode = true;
         mAddButton.setTitle("刪除");
-        mAddButton.setIcon(android.R.drawable.ic_menu_delete);
+        mAddButton.setIcon(R.drawable.delete);
     }
 
     private void closeSelection() {
         mRestaurantAdapter.clearSelection();
         mSelectionMode = false;
         mAddButton.setTitle("加入餐廳");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
         mToolbar.setTitle("群組 > " + groupName);
     }
 

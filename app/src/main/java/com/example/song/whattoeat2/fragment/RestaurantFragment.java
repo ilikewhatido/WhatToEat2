@@ -58,7 +58,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         super.onCreateOptionsMenu(menu, inflater);
         mAddButton = menu.findItem(R.id.menu_action_mode_action);
         mAddButton.setTitle("新增");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     private void openSelection() {
         mSelectionMode = true;
         mAddButton.setTitle("刪除");
-        mAddButton.setIcon(android.R.drawable.ic_menu_delete);
+        mAddButton.setIcon(R.drawable.delete);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -134,7 +134,7 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
         mRestaurantAdapter.clearSelection();
         mSelectionMode = false;
         mAddButton.setTitle("新增");
-        mAddButton.setIcon(android.R.drawable.ic_menu_add);
+        mAddButton.setIcon(R.drawable.plus);
         mToolbar.setTitle("WhatToEat2");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
