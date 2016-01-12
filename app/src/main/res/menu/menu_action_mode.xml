@@ -4,9 +4,16 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/menu_action_mode_action"
+        android:id="@+id/menu_action_mode_dice"
         android:orderInCategory="1"
-        android:title="default"
+        android:title="default_1"
+        android:visible="false"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/menu_action_mode_action"
+        android:orderInCategory="2"
+        android:title="default_2"
         app:showAsAction="always|withText" />
 
 </menu>

@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,6 +29,7 @@ public class AddRestaurantDialog extends DialogFragment implements View.OnClickL
         mName = (EditText) view.findViewById(R.id.dialog_add_restaurant_name);
         mNumber = (EditText) view.findViewById(R.id.dialog_add_restaurant_number);
         setCancelable(true);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE); // dialog without title
         return view;
     }
     @Override

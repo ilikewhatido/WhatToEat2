@@ -9,15 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.song.whattoeat2.fragment.BaseFragment;
 import com.example.song.whattoeat2.fragment.GroupFragment;
-import com.example.song.whattoeat2.fragment.HomeFragment;
 import com.example.song.whattoeat2.fragment.RestaurantFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public enum Section {
-        HOME, GROUPS, RESTAURANTS;
+        GROUPS, RESTAURANTS;
     }
 
     /**
@@ -110,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (Section.values()[position]) {
-                case HOME:
-                    return HomeFragment.newInstance(position);
                 case GROUPS:
                     return GroupFragment.newInstance(position);
                 case RESTAURANTS:
@@ -129,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (Section.values()[position]) {
-                case HOME:
-                    return getString(R.string.tab_title_home);
                 case GROUPS:
                     return getString(R.string.tab_title_groups);
                 case RESTAURANTS:

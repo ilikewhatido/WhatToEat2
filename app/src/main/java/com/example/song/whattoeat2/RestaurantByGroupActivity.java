@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.example.song.whattoeat2.fragment.GroupFragment;
 import com.example.song.whattoeat2.fragment.RecyclerViewClickListener;
 import com.example.song.whattoeat2.fragment.RestaurantAdapter;
+import com.example.song.whattoeat2.fragment.ShakeDialog;
 import com.example.song.whattoeat2.fragment.SimpleDividerItemDecoration;
 
 public class RestaurantByGroupActivity extends BaseActivity implements RecyclerViewClickListener {
@@ -26,6 +27,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
 
     private boolean mSelectionMode = false;
     private MenuItem mAddButton;
+    private MenuItem mDiceButton;
     private Menu mMenu;
     private Toolbar mToolbar;
 
@@ -49,6 +51,11 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         mAddButton = mMenu.findItem(R.id.menu_action_mode_action);
         mAddButton.setTitle("加入餐廳");
         mAddButton.setIcon(R.drawable.plus);
+
+        mDiceButton = mMenu.findItem(R.id.menu_action_mode_dice);
+        mDiceButton.setVisible(true);
+        mDiceButton.setTitle("Shake!");
+        mDiceButton.setIcon(R.drawable.dice);
         return true;
     }
 
@@ -77,6 +84,10 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
                 } else {
                     finish();
                 }
+                return true;
+            case R.id.menu_action_mode_dice:
+                ShakeDialog shakeDialog = new ShakeDialog();
+                shakeDialog.show(getSupportFragmentManager(), ShakeDialog.TAG);
                 return true;
             default:
                 return true;
