@@ -18,7 +18,7 @@ package com.example.song.whattoeat2.widget.adapters;
 
 import android.content.Context;
 
-import com.example.songhan.whattoeat.widget.WheelAdapter;
+import com.example.song.whattoeat2.widget.WheelAdapter;
 
 
 /**

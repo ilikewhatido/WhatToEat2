@@ -32,8 +32,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-import com.example.songhan.whattoeat.R;
-import com.example.songhan.whattoeat.widget.adapters.WheelViewAdapter;
+import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.widget.adapters.WheelViewAdapter;
 
 import java.util.LinkedList;
 import java.util.List;

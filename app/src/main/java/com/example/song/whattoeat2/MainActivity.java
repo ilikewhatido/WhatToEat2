@@ -10,7 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.song.whattoeat2.fragment.BaseFragment;
 import com.example.song.whattoeat2.fragment.GroupFragment;
