@@ -46,6 +46,7 @@ import java.util.List;
 public class WheelView extends View {
 
 	/** Top and bottom shadows colors */
+	//TODO
 	private int[] SHADOWS_COLORS = new int[] { 0x00FFFFFF,
 			0x00FFFFFF, 0x00FFFFFF };
 
@@ -93,7 +94,7 @@ public class WheelView extends View {
 	private LinearLayout itemsLayout;
 
 	// The number of first item in layout
-	private int firstItem;
+	public int firstItem;
 
 	// View adapter
 	private WheelViewAdapter viewAdapter;

@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,6 +28,7 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         mCancel.setOnClickListener(this);
         mName = (EditText) view.findViewById(R.id.dialog_add_group_name);
         setCancelable(true);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE); // dialog without title
         return view;
     }
     @Override
