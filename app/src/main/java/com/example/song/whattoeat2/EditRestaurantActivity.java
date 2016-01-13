@@ -47,7 +47,11 @@ public class EditRestaurantActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mEditMode) {
-            closeEditMode();
+            // this fix the backspace exiting issue
+            // http://stackoverflow.com/questions/4886858/android-edittext-deletebackspace-key-event
+            if(keyCode != KeyEvent.KEYCODE_DEL){
+                closeEditMode();
+            }
             return true;
         } else {
             return super.onKeyDown(keyCode, event);
