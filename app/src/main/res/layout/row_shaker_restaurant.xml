@@ -12,7 +12,6 @@
         android:layout_marginLeft="6dp"
         android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:textColor="#F000"
-        android:textStyle="bold" />
+        android:textColor="#F000" />
 
 </LinearLayout>

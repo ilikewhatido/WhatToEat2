@@ -51,7 +51,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
         getMenuInflater().inflate(R.menu.menu_action_mode, menu);
         mMenu = menu;
         mAddButton = mMenu.findItem(R.id.menu_action_mode_action);
-        mAddButton.setTitle("加入餐廳");
+        mAddButton.setTitle("加入餐廳至群組");
         mAddButton.setIcon(R.drawable.plus);
 
         mDiceButton = mMenu.findItem(R.id.menu_action_mode_dice);
@@ -92,7 +92,7 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
                 Bundle bundle = new Bundle();
                 bundle.putLong(BUNDLE_GROUP_ID, groupId);
                 if(dbAdapter.getRestaurantsByGroupId(groupId).size() == 0) {
-                    Toast.makeText(this, "群組無餐廳", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "該群組無餐廳", Toast.LENGTH_SHORT).show();
                 } else {
                     shakeDialog.setArguments(bundle);
                     shakeDialog.show(getSupportFragmentManager(), ShakeDialog.TAG);

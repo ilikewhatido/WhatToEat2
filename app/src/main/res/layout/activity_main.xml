@@ -25,7 +25,7 @@
             style="@style/TabLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorHeight="2dp"
+            app:tabIndicatorHeight="4dp"
             app:tabPaddingEnd="0dp"
             app:tabPaddingStart="0dp" />
 
