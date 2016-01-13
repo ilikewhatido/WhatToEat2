@@ -1,9 +1,8 @@
 package com.example.song.whattoeat2.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.RestaurantByGroupActivity;
 import com.example.song.whattoeat2.database.DBAdapter;
 import com.example.song.whattoeat2.database.Restaurant;
 import com.example.song.whattoeat2.widget.WheelView;
@@ -39,7 +39,8 @@ public class ShakeDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDb = new DBAdapter(getActivity());
         View view = inflater.inflate(R.layout.dialog_shake, null);
-        mShakerAdapter = new ShakerAdapter(getActivity(), mDb.getRestaurants());
+        long groupId = getArguments().getLong(RestaurantByGroupActivity.BUNDLE_GROUP_ID);
+        mShakerAdapter = new ShakerAdapter(getActivity(), mDb.getRestaurantsByGroupId(groupId));
         mShaker = (WheelView) view.findViewById(R.id.shaker);
         mShaker.setVisibleItems(SHAKER_SIZE);
         mShaker.setViewAdapter(mShakerAdapter);

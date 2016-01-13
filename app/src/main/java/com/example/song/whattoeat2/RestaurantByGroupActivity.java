@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.song.whattoeat2.fragment.GroupFragment;
 import com.example.song.whattoeat2.fragment.RecyclerViewClickListener;
@@ -87,7 +89,14 @@ public class RestaurantByGroupActivity extends BaseActivity implements RecyclerV
                 return true;
             case R.id.menu_action_mode_dice:
                 ShakeDialog shakeDialog = new ShakeDialog();
-                shakeDialog.show(getSupportFragmentManager(), ShakeDialog.TAG);
+                Bundle bundle = new Bundle();
+                bundle.putLong(BUNDLE_GROUP_ID, groupId);
+                if(dbAdapter.getRestaurantsByGroupId(groupId).size() == 0) {
+                    Toast.makeText(this, "群組無餐廳", Toast.LENGTH_SHORT).show();
+                } else {
+                    shakeDialog.setArguments(bundle);
+                    shakeDialog.show(getSupportFragmentManager(), ShakeDialog.TAG);
+                }
                 return true;
             default:
                 return true;

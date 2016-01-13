@@ -102,6 +102,7 @@ public class EditRestaurantActivity extends BaseActivity {
         mEditNumber.setVisibility(View.VISIBLE);
         mEditButton.setTitle("存檔");
         mEditButton.setIcon(R.drawable.content_save);
+        mEditName.requestFocus();
         loadRestaurant();
     }
 
