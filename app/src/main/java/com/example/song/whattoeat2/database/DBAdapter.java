@@ -130,6 +130,31 @@ public class DBAdapter {
         Log.d(getClass().getName(), "deleteRestaurants" + " WHERE " + whereClause);
         mSQLiteDatabase.delete(TABLE_RESTAURANT, whereClause, null);
     }
+    public int updateRestaurant(Restaurant restaurant) {
+        ContentValues cv = new ContentValues();
+        cv.put(RESTAURANT_NAME, restaurant.getName());
+        cv.put(RESTAURANT_NUMBER, restaurant.getNumber());
+        return mSQLiteDatabase.update(TABLE_RESTAURANT, cv, RESTAURANT_ID + "=" + restaurant.getId(), null);
+    }
+
+    public Restaurant getRestaurant(long id) {
+        String sql = "SELECT * FROM " + TABLE_RESTAURANT + " WHERE " + RESTAURANT_ID + " = " + id + ";";
+        Cursor cursor = null;
+        Restaurant restaurant = null;
+        try {
+            cursor = mSQLiteDatabase.rawQuery(sql, null);
+            if(cursor.moveToFirst()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NAME));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(RESTAURANT_NUMBER));
+                restaurant = new Restaurant(id, name, number);
+            }
+        } finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return restaurant;
+    }
+
     public List<Restaurant> getRestaurantsByGroupId(long id) {
         String sql = "SELECT * FROM " + TABLE_RESTAURANT +
                 " WHERE " + RESTAURANT_ID +

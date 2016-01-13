@@ -17,14 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- singleTop will make the back button work  http://stackoverflow.com/questions/14462456/returning-from-an-activity-using-navigateupfromsametask-->
+        <!-- singleTop will make the back button work  http://stackoverflow.com/questions/14462456/returning-from-an-activity-using-navigateupfromsametask -->
         <activity
             android:name=".RestaurantByGroupActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddRestaurantToGroupActivity"
-            android:parentActivityName=".RestaurantByGroupActivity"></activity>
+            android:parentActivityName=".RestaurantByGroupActivity" />
+        <activity android:name=".EditRestaurantActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.song.whattoeat2.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -14,12 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.song.whattoeat2.EditRestaurantActivity;
 import com.example.song.whattoeat2.R;
+import com.example.song.whattoeat2.RestaurantByGroupActivity;
 import com.example.song.whattoeat2.database.Restaurant;
 
 import java.util.List;
 
 public class RestaurantFragment extends BaseFragment implements RecyclerViewClickListener {
+
+    public static final String BUNDLE_RESTAURANT_ID = "bundle_restaurant_id";
 
     private RecyclerView mRestaurantsRecyclerView;
     private RestaurantAdapter mRestaurantAdapter;
@@ -45,12 +50,17 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mRestaurantsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_restaurants_list);
         mRestaurantAdapter = new RestaurantAdapter(dbAdapter.getRestaurants(), this);
         mRestaurantsRecyclerView.setAdapter(mRestaurantAdapter);
         mRestaurantsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRestaurantsRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
     }
 
     @Override
@@ -98,8 +108,11 @@ public class RestaurantFragment extends BaseFragment implements RecyclerViewClic
     @Override
     public void onItemClicked(int position) {
         if (!mSelectionMode) {
-            //TODO
-            // Not in action mode... do the normal thing
+            Bundle extra = new Bundle();
+            extra.putLong(BUNDLE_RESTAURANT_ID, mRestaurantAdapter.getItemId(position));
+            Intent intent = new Intent(getActivity(), EditRestaurantActivity.class);
+            intent.putExtras(extra);
+            startActivity(intent);
         } else {
             toggleSelection(position);
         }

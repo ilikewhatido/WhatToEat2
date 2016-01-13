@@ -94,8 +94,8 @@ public class GroupAdapter extends SelectableAdapter<GroupAdapter.ViewHolder> {
         return mGroups.get(position).getId();
     }
 
-    public String getItemName(int position) {
-        return mGroups.get(position).getName();
+    public Group getItem(int position) {
+        return mGroups.get(position);
     }
 
     @Override

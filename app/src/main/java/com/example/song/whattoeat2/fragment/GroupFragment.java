@@ -101,11 +101,10 @@ public class GroupFragment extends BaseFragment implements RecyclerViewClickList
     @Override
     public void onItemClicked(int position) {
         if (!mSelectionMode) {
-            //TODO
             // Not in action mode... open new activity
             Bundle extra = new Bundle();
             extra.putLong(BUNDLE_GROUP_ID, mGroupAdapter.getItemId(position));
-            extra.putString(BUNDLE_GROUP_NAME, mGroupAdapter.getItemName(position));
+            extra.putString(BUNDLE_GROUP_NAME, mGroupAdapter.getItem(position).getName());
             Intent intent = new Intent(getActivity(), RestaurantByGroupActivity.class);
             intent.putExtras(extra);
             startActivity(intent);

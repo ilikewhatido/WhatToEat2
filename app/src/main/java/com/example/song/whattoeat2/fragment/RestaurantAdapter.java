@@ -122,4 +122,8 @@ public class RestaurantAdapter extends SelectableAdapter<RestaurantAdapter.ViewH
         mRestaurants = restaurants;
         notifyDataSetChanged();
     }
+
+    public Restaurant getItem(int position) {
+        return mRestaurants.get(position);
+    }
 }
