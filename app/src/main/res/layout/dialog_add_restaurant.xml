@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="24dp">
 
     <EditText
         android:id="@+id/dialog_add_restaurant_name"
@@ -12,7 +16,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:hint="@string/dialog_add_restaurant_name" />
+        android:hint="@string/dialog_add_restaurant_name"
+        android:paddingBottom="10dp" />
 
     <EditText
         android:id="@+id/dialog_add_restaurant_number"
@@ -23,30 +28,27 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/dialog_add_restaurant_name"
-        android:hint="@string/dialog_add_restaurant_number" />
+        android:hint="@string/dialog_add_restaurant_number"
+        android:paddingTop="10dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/dialog_add_restaurant_ok"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/dialog_add_restaurant_number"
-        android:orientation="horizontal">
+        android:text="@string/dialog_ok" />
 
-        <Button
-            android:id="@+id/dialog_add_restaurant_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dialog_cancel" />
-
-        <Button
-            android:id="@+id/dialog_add_restaurant_ok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dialog_ok" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/dialog_add_restaurant_cancel"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_add_restaurant_number"
+        android:layout_toLeftOf="@+id/dialog_add_restaurant_ok"
+        android:layout_toStartOf="@+id/dialog_add_restaurant_ok"
+        android:text="@string/dialog_cancel" />
 
 </RelativeLayout>
