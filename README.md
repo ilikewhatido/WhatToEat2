@@ -2,9 +2,9 @@
 
 This app is just a proof of concept 
 
-- Manage restaurant that theuser frequents
+- Manage restaurant that users frequent
 - Categorize restaurant into "GROUPS"
-- Provides the ability to randomly pick a restaurnt for you  if you ever run into the infamous first world problem of not knowing what to eat
+- Provides the ability to randomly pick a restaurnt for you  if you ever run into the infamous first world problem of not knowing what to eat!
 
 TODO:
 - Language support
