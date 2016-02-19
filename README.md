@@ -6,7 +6,7 @@ This app is just a proof of concept
 - Categorize restaurant into "GROUPS"
 - Provides the ability to randomly pick a restaurnt for you  if you ever run into the infamous first world problem of not knowing what to eat!
 
-Currently working on - proximity search using Google places api
+Currently working on - proximity search using Google places api + Volley
 
 TODO:
 - Language support
